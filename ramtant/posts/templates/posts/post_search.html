@@ -1,0 +1,27 @@
+{% extends "ui.html" %}
+
+{% block title %}ramtant - посты{% endblock %}
+{% block headp %}
+    {% if user.is_authenticated == False %}
+        <meta http-equiv="refresh" content="0;URL=/"/>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <h1>результаты поиска</h1>
+    {% if posts %}
+        <ol>
+            {% for post in posts %}
+                <li>
+                    <h2>{{ post.title }}</h2>
+                    <p>{{ post.content }}</p>
+                    {% if post.img %}<img src="{{ post.img.url }}"/>{% endif %}
+                    <a href="{% url 'profile' username=post.author.user.username %}">{{ post.author }}</a> | {{ post.created_at }}
+                    <a href="{% url 'post_detail' post_id=post.id %}">подробнее</a>
+                </li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        ничего не найдено
+    {% endif %}
+{% endblock %}

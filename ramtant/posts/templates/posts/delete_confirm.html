@@ -1,0 +1,16 @@
+{% extends "ui.html" %}
+
+{% block title %}ramtant - {{ post.title }}{% endblock %}
+{% block headp %}
+    {% if user.is_authenticated == False %}
+        <meta http-equiv="refresh" content="0;URL=/"/>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <h3>Подтвердите удаление</h3>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit">Удалить</button>
+    </form>
+{% endblock %}

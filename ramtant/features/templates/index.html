@@ -1,0 +1,16 @@
+{% extends "ui.html" %}
+
+{% block title %}ramtant - главная{% endblock %}
+{% block headp %}
+    {% if user.is_authenticated %}
+        <meta http-equiv="refresh" content="0;URL={% url 'post_list' %}"/>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+    {% if not user.is_authenticated %}
+        описание сайта и настойчивое предложение зарегестрироваться или войти
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "ui.html" %}
+
+{% block title %}ramtant - лс{% endblock %}
+
+{% block headp %}
+    {% if user.is_authenticated == False %}
+        <meta http-equiv="refresh" content="0;URL=/"/>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <h1>Чат с {{ username }}</h1>
+
+    <div id="chat">
+        <div id="messagesContainer" style="border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll;">
+            <!-- сообщения -->
+        </div>
+        <input type="text" id="messageInput" placeholder="Введите сообщение" />
+        <button id="sendButton">Отправить</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let messageInput = document.getElementById('messageInput');
+        if (!messageInput) {
+            console.error('"messageInput" не найден');
+            return;
+        }
+            // Получаем текущего пользователя или другое значение, которое нужно для WebSocket
+            const username = '{{ request.user.username }}'; 
+        
+            const chatSocket = new WebSocket(
+                `ws://${window.location.host}/ws/chats/${username}/`
+            );
+        
+            // Получаем элементы DOM
+            messageInput = document.getElementById('messageInput');
+            const sendButton = document.getElementById('sendButton');
+            const messagesContainer = document.getElementById('messagesContainer');
+        
+            // Проверяем, существуют ли элементы на странице
+            if (!messageInput || !sendButton || !messagesContainer) {
+                console.error('Не удалось найти все необходимые элементы на странице!');
+                return;
+            }
+        
+            chatSocket.onopen = function (e) {
+                console.log('WebSocket подключен.');
+            };
+        
+            chatSocket.onmessage = function (e) {
+                const data = JSON.parse(e.data);
+        
+                const messageElement = document.createElement('div');
+                messageElement.textContent = `${data.username}: ${data.message}`;
+                messagesContainer.appendChild(messageElement);
+            };
+
+            chatSocket.onerror = function (e) {
+                console.error('Произошла ошибка WebSocket.', e);
+            };
+        
+            chatSocket.onclose = function (e) {
+                console.error('WebSocket закрыт неожиданно.', e)
+            };
+        
+            sendButton.onclick = function () {
+                const message = messageInput.value;
+        
+                if (message) {
+                    chatSocket.send(JSON.stringify({
+                        message: message,
+                        username: username,
+                    }));
+        
+                    messageInput.value = '';
+                } else {
+                    console.warn('Сообщение не может быть пустым.');
+                }
+            };
+        
+            messageInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    sendButton.click();
+                }
+            });
+        });        
+    </script>    
+{% endblock %}

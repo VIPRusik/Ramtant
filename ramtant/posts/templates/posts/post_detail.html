@@ -1,0 +1,38 @@
+{% extends "ui.html" %}
+
+{% block title %}ramtant - {{ post.title }}{% endblock %}
+{% block headp %}
+    {% if user.is_authenticated == False %}
+        <meta http-equiv="refresh" content="0;URL=/"/>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div>
+        <h1>{{ post.title }}</h1>
+        <p>{{ post.content }}</p>
+        {% if post.img %}<img src="{{ post.img.url }}"/>{% endif %}
+        <p><a href="{% url 'profile' username=post.author.user.username %}">{{ post.author }}</a> | {{ post.created_at }}{% if post.author.user == user %} | <a href="{% url 'post_edit' post_id=post.id %}">изменить</a> | <a href="{% url 'post_delete' post_id=post.id %}">удалить</a>{% endif %}</p>
+    </div>
+    <div>
+        <div>
+            {% for comment in comments %}
+                <li>
+                    <div>
+                    <a href="{% url 'profile' username=comment.author.user.username %}">{{ comment.author.user.username }}</a>: {{ comment.content }} <br>
+                    <small>Дата: {{ comment.created_at }}</small>
+                    </div>
+                </li>
+            {% empty %}
+                <li>нет комментариев</li>
+            {% endfor %}
+        </div>
+        <div>
+            <form method="post">
+                {{ form.as_p }}
+                {% csrf_token %}
+                <button type="submit">отправить</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

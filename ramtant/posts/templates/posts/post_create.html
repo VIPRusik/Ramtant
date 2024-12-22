@@ -1,0 +1,16 @@
+{% extends "ui.html" %}
+
+{% block title %}ramtant - написание поста{% endblock %}
+{% block headp %}
+    {% if user.is_authenticated == False %}
+        <meta http-equiv="refresh" content="0;URL=/"/>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+    {{ form.as_p }}
+    {% csrf_token %}
+    <button type="submit">опубликовать</button>
+</form>
+{% endblock %}

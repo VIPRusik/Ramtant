@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <meta charset="utf-8" />
+        {% block headp %}{% endblock %}
+        <link rel="stylesheet" href={% static "css/ui.css" %}/>
+    </head>
+    <body>
+        <header>
+            <div class="menu container">
+                <div class="p1">
+                <a href="/" class="a1">главная</a>
+                {% if user.is_authenticated %}
+                        <a href="{% url 'my_profile' %}">профиль</a>
+                        <a href="{% url 'post_create'%}">написать пост</a>
+                        <a href="{% url 'chat_list'%}">чаты</a>
+                    </div>
+                    <div class="p2">
+                        <form action="{% url 'logout' %}" method="post">
+                            {% csrf_token %}
+                            <button class="quit-button">выход</button>
+                        </form>
+                    </div>
+                {% else %}
+                    </div>
+                    <div class="p2">
+                        <a href="{% url 'register'%}">зарегистрироваться</a>
+                        <a href="{% url 'login'%}">войти</a>
+                    </div>
+                {% endif %}
+            </div>
+        </header>
+        {% block content %}
+        {% endblock %}
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+            
+            body {
+                background-color: #171717;
+                color: #eeeeee;
+                text-decoration: none;
+                font-family: "JetBrains Mono", serif;
+                padding-left: 3%;
+                padding-right: 3%;
+            }
+            
+            a:link {
+                color: #eeeeee;
+                text-decoration: none;
+            }
+              
+            a:visited {
+                color: #eeeeee;
+                text-decoration: none;
+            }
+              
+            a:focus {
+                color: #eeeeee;
+                text-decoration: none;
+            }
+              
+            a:hover {
+                text-decoration: underline;
+                text-decoration-color: #c97922;
+                text-decoration-thickness: 4px;
+            }
+              
+            a:active {
+                text-decoration: none;
+                color: #c97922;
+            }
+
+            .container { 
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-start;
+            }
+
+            .menu {
+                font-size: 21px;
+                margin-top: 1%;
+                margin-bottom: 2%;
+            }
+
+            .p2 {
+                right: 0;
+                margin-right: 6%;
+                position: absolute;
+            }
+            
+            .quit-button {
+                font-size: 21px;
+                font-family: "JetBrains Mono", serif;
+                background: #171717;
+                color: #eeeeee;
+            }
+
+            .quit-button img{
+                width: 21px;
+                vertical-align: middle
+            }
+            
+            .full-width {
+                width: 100%;
+            }
+
+            .a1:link {
+                color: #c97922;
+            }
+
+            .a1:focus {
+                color: #c97922;
+            }
+
+            .a1:visited {
+                color: #c97922;
+            }
+        </style>
+    </body>
+</html>

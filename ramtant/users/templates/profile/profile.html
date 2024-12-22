@@ -1,0 +1,82 @@
+{% extends "ui.html" %}
+
+{% block title %}ramtant - {{profile.user.username}}{% endblock %}
+
+{% block headp %}
+    {% if user.is_authenticated == False %}
+        <meta http-equiv="refresh" content="0;URL=/"/>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div>
+        <div class="info">
+            <img src=" {{ profile.img.url }} "/>
+            <p>юзернейм: {{profile.user.username}}</p>
+            {% if profile.user == user %}
+                <p>email: {{user.email}}</p>
+            {% endif %}
+            <p>{{profile.bio}}</p>
+        </div>
+        <div>
+            {% if profile.medal1 %}
+            <p>medal1</p>
+            {% endif %}
+            {% if profile.medal2 %}
+            <p>medal2</p>
+            {% endif %}
+            {% if profile.medal3 %}
+            <p>medal3</p>
+            {% endif %}
+        </div>
+        {% if profile.user == user %}
+            <a href="{% url 'profile_edit'%}">изменить профиль</a>
+        {% endif %}
+    </div>
+    <a href="{% url 'chat_direct' profile.user.username %}">
+        <button>Перейти в чат</button>
+    </a>
+    <div>
+        {% if not profile.user == user %}
+            {% if profile in user.profile.follows.all %}
+                <a href="{% url 'unfollow' username=profile.user.username %}">отписаться</a>
+            {% else %}
+                <a href="{% url 'follow' username=profile.user.username %}">подписаться</a>
+            {% endif %}
+        {% endif %}
+    </div>
+    <div>
+        <h2>подписки ({{profile.follows.all|length}})</h2>
+        <ul>
+            {% for follow in profile.follows.all %}
+                <li>
+                    <a href="{% url 'profile' username=follow.user.username %}">{{ follow }}</a>
+                </li>
+            {% empty %}
+                нет подписок
+            {% endfor %}
+        </ul>
+        <h2>подписчики ({{profile.followed_by.all|length}})</h2>
+        <ul>
+            {% for followed in profile.followed_by.all %}
+                <li>
+                    <a href="{% url 'profile' username=followed.user.username %}">{{ followed }}</a>
+                </li>
+            {% empty %}
+                нет подписчиков
+            {% endfor %}
+        </ul>
+    </div>
+    <div>
+        <ul>
+            {% for post in posts.0 %}
+                <li>
+                    <h3>{{ post.title }}</h3>
+                    <p>{{ post.content }}</p>
+                    {% if post.img %}<img src="{{ post.img.url }}"/>{% endif %}
+                    {{ post.author }} | {{ post.created_at }} | <a href="{% url 'post_detail' post_id=post.id %}">подробнее</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

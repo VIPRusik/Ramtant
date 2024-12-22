@@ -1,0 +1,53 @@
+{% extends "ui.html" %}
+
+{% block title %}ramtant - посты{% endblock %}
+{% block headp %}
+    {% if user.is_authenticated == False %}
+        <meta http-equiv="refresh" content="0;URL=/"/>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div>
+        <form action="{% url 'post_search' %}" method="post" class="container">
+            {% csrf_token %}
+            <div>
+                <input name="search_post_field" class="full-width"/>
+            </div>
+            <div>
+                <button type="submit" class="search-button">найти</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <ol>
+            {% for post in posts.0 %}
+                <li>
+                    <h2>{{ post.title }}</h2>
+                    <small><a href="{% url 'profile' username=post.author.user.username %}">{{ post.author }}</a> | {{ post.created_at }} | <a href="{% url 'post_detail' post_id=post.id %}">подробнее</a></small>
+                    <p>{{ post.content }}</p>
+                    {% if post.img %}<img src="{{ post.img.url }}"/>{% endif %}
+                </li>
+            {% endfor %}
+        </ol>
+    </div>
+    <style>
+        .search-button {
+            font-size: 21px;
+            font-family: "JetBrains Mono", serif;
+            background: #171717;
+            color: #eeeeee;
+            margin-left: 1150%;
+        }
+
+        input {
+            font-size: 21px;
+            font-family: "JetBrains Mono", serif;
+            background: #171717;
+            color: #eeeeee;
+            margin-left: 2%;
+            padding-right: 300%;
+        }
+        
+    </style>
+{% endblock %}
