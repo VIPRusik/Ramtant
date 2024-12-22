@@ -23,7 +23,6 @@ from django.conf.urls.static import static
 import users.views as u
 import features.views as f
 import posts.views as p
-import chat.views as v
 
 account_patterns = [
     path('', include('django.contrib.auth.urls')),
@@ -47,19 +46,13 @@ post_patterns = [
     path('search/', p.post_search, name='post_search')
 ]
 
-chat_patterns = [
-    path('', v.chat_list, name='chat_list'),
-    path('<str:username>/', v.chat_direct, name='chat_direct')
-]
-
 urlpatterns = [
     path('', f.index),
     path('index', f.index),
     path('admin/', admin.site.urls),
     path('account/', include(account_patterns)),
     path('profile/', include(profile_patterns)),
-    path('posts/', include(post_patterns)),
-    path('chats/', include(chat_patterns))
+    path('posts/', include(post_patterns))
 ]
 
 if settings.DEBUG == True:

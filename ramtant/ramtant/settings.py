@@ -41,13 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'daphne',
     'django.contrib.staticfiles',
     'users',
     'features',
     'posts',
-    'chat',
-    'channels',
 ]
 
 MIDDLEWARE = [
@@ -79,17 +76,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ramtant.wsgi.application'
-ASGI_APPLICATION = 'ramtant.asgi.application'
-
-
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],  # Redis сервер по умолчанию
-        },
-    },
-}
 
 
 
